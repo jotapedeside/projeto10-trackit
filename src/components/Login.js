@@ -1,22 +1,78 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AssetsImgs from "../assets/img/AssetsImg";
+import axios from "axios";
 
 export default function Login(){
 
   //const { setUserInfo, setSidebaropen } = useContext(UserContext);
-  //const navigate = useNavigate();
-  const [estaSalvo, setEstaSalvo] = useState(true)
-  const forms = inputs()
+  const navigate = useNavigate();
+  //const [estaSalvo, setEstaSalvo] = useState(true);
+  const [user, setUser] = useState({
+    email: "",
+    password: ""
+  });
+  const [enableBtn, setEnableBtn] = useState(true);
+  const forms = inputs();
+
+  //INTERNAL FUNCTIONS
+  function inputs() {
+    return (
+      <>
+        <input
+          type="email"
+          placeholder="email"
+          required
+          value={user.email}
+          onChange={e => setUser({ ...user, email: e.target.value })}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          required
+          value={user.password}
+          onChange={e => setUser({ ...user, password: e.target.value })}
+        />
+        <button>
+          {/*TODO: ficar dinâmico*/}
+          { !enableBtn ? "Carregando..." : "Entrar" }
+        </button>
+        <Link to="/cadastro">
+          <p>Não tem uma conta? Cadastre-se!</p>
+        </Link>
+      </>
+    )
+  }
+
+  function validateLogin(event) {
+    //TODO: localstorage stuff
+    event.preventDefault();
+    if (enableBtn){
+      setEnableBtn(false);
+      const res = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", {
+        email: user.email,
+        password: user.password
+    });
+      res.then(() => {
+        //console.log(res);
+        navigate("/today")
+      })
+      .catch(e => {
+        alert("Um erro ocorreu: " + e.res + ". Por favor, tente novamente.");
+        setEnableBtn(true)
+      })
+    }
+  }
+
   return (
     <LoginScreen>
-        {/* TODO: ifsaved logic
-        {estaSalvo ? <Loader text="Um Segundo"/> : TREMdeBAIXO}*/}
-        <>
-          <img src={AssetsImgs.Logo} alt="logo" />
-          <Forms onSubmit={validateLogin}>{forms}</Forms>
-        </>
+      {/* TODO: ifsaved logic
+      {estaSalvo ? <Loader text="Um Segundo"/> : TREMdeBAIXO}*/}
+      <>
+        <img src={AssetsImgs.Logo} alt="logo" />
+        <Forms onSubmit={validateLogin}>{forms}</Forms>
+      </>
     </LoginScreen>
   )
 }
@@ -25,40 +81,12 @@ export default function Login(){
 
 }*/
 
-function inputs() {
-  return (
-    <>
-      <input
-        type="email"
-        placeholder="email"
-        required
-      />
-      <input
-        type="password"
-        placeholder="password"
-        required
-      />
-      <button>
-        {/*enable button logic*/}
-      </button>
-      <Link to="/cadastro">
-        <p>Não tem uma conta? Cadastre-se!</p>
-      </Link>
-    </>
-  )
-}
-
-function validateLogin(event) {
-  //TODO: sign up logic
-}
-
 const LoginScreen = styled.div`
   p{
     margin-top: 25px;
     font-size: 14px;
     font-weight: 400;
     line-height: 17px;
-    
     text-decoration-line: underline;
     color: #52B6FF;
   }
@@ -88,6 +116,7 @@ const Forms = styled.form`
       color: var(--input-color);
     }
     button {
+      color: #ffffff;
       line-height: 26px;
       background: var(--color-blue);
     }

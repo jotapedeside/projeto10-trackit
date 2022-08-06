@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, {createContext} from "react";
 import GlobalStyle from "./GlobalStyle";
 import Login from "./Login";
+import Register from "./Register";
 
 function App() {
   
@@ -14,9 +15,8 @@ function App() {
         <GlobalStyle />
         <Routes>
           <Route path="/" element={<Login />} />
-          {/*
           <Route path="/cadastro" element={<Register />} />
-          <Route path="/habitos" element={<Habits />} />
+          {/*<Route path="/habitos" element={<Habits />} />
           <Route path="/hoje" element={<Today />} />
           <Route path="/historico" element={<History />} />
           */}
