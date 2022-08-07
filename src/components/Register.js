@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AssetsImgs from "../assets/img/AssetsImg";
 import axios from "axios";
+import UserContext from "../components/UserContext";
+import { useContext } from "react";
 
 
 export default function Register() {
@@ -14,6 +16,8 @@ export default function Register() {
     password: ""
   });
   const [enableBtn, setEnableBtn] = useState(true);
+
+  const { userData, setUserData } = useContext(UserContext);
 
   const forms = inputs();
   //INTERNAL FUNCTIONS
@@ -72,7 +76,8 @@ export default function Register() {
         password: user.password
     });
       res.then(() => {
-        //console.log(res);
+        console.log(res);
+        setUserData(res.data);
         navigate("/")
       })
       .catch((e) => {

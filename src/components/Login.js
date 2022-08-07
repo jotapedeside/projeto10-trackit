@@ -3,19 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AssetsImgs from "../assets/img/AssetsImg";
 import axios from "axios";
+import UserContext from "../components/UserContext";
+import { useContext } from "react";
 
 export default function Login(){
-
-  //const { setUserInfo, setSidebaropen } = useContext(UserContext);
-  const navigate = useNavigate();
   //const [estaSalvo, setEstaSalvo] = useState(true);
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     email: "",
     password: ""
   });
   const [enableBtn, setEnableBtn] = useState(true);
+  const { userData, setUserData } = useContext(UserContext);
   const forms = inputs();
-
+  console.log(userData);
   //INTERNAL FUNCTIONS
   function inputs() {
     return (
@@ -54,11 +55,16 @@ export default function Login(){
         email: user.email,
         password: user.password
     });
-      res.then(() => {
-        //console.log(res);
-        navigate("/today")
+      res.then((user) => {
+        console.log(user.data);
+        console.log(user);
+        console.log(user.data.image);
+        setUserData(user.data);
+        //setInfartinho(user.data);
+        navigate("/hoje")
       })
       .catch(e => {
+        console.log(e);
         alert("Um erro ocorreu: " + e.res + ". Por favor, tente novamente.");
         setEnableBtn(true)
       })
