@@ -5,18 +5,16 @@ import UserContext from "../components/UserContext";
 import { useContext } from "react";
 
 export default function Header(){
-  const {userData, userDataData} = useContext(UserContext);
-  console.log(userData);
+  const {userData} = useContext(UserContext);
   const {image} = userData;
-  //const {image} = "https://http.cat/411.jpg";
-  console.log(image);
+  
   return (
     <HeaderWrapper>
       <Link to="today">
         <img src={AssetsImgs.TrackIt} alt="" />
       </Link>
       <div>
-        <img src={image} alt={image} />
+        <UserImg src={image} alt={image} />
       </div>
     </HeaderWrapper>
   )
@@ -35,14 +33,19 @@ const HeaderWrapper = styled.header`
   align-items: center;
   justify-content: space-between;
   padding: 0 18px;
-.div-legal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between
-}
-ion-icon {
-    font-size: 45px;
-    color: white;
-    cursor: pointer;
-}
+  /*ion-icon {
+      font-size: 45px;
+      color: white;
+      cursor: pointer;
+  }*/
+  img{
+    width: 97px;
+    height: 49px;
+  }
 `
+const UserImg = styled.img`
+  &&{width: 51px ;
+  height: 51px;
+  border-radius: 98.5px;
+  object-fit: cover;}
+  `

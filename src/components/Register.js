@@ -17,7 +17,7 @@ export default function Register() {
   });
   const [enableBtn, setEnableBtn] = useState(true);
 
-  const { userData, setUserData } = useContext(UserContext);
+  const { setUserData } = useContext(UserContext);
 
   const forms = inputs();
   //INTERNAL FUNCTIONS
@@ -76,7 +76,6 @@ export default function Register() {
         password: user.password
     });
       res.then(() => {
-        console.log(res);
         setUserData(res.data);
         navigate("/")
       })

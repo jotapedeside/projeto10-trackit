@@ -5,7 +5,6 @@ export default function Today() {
   return (
     <>
       <Header />
-      {/*TODO: create header*/}
       <TodayBody>
         <h1>Oi</h1>
         <h2>Nenhum habito concluído ainda</h2>

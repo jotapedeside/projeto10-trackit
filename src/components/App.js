@@ -10,15 +10,12 @@ import Today from "./Today";
 import { useContext } from "react";
 
 function App() {
-  const [infartinho, setInfartinho] = useState([]);
-  //const { userData, setUserData } = useContext(UserContext);
 
   return (
     <UserProvider>
       <BrowserRouter>
         <GlobalStyle />
         <Routes>
-
           <Route path="/" element={ <Login /> } />
           <Route path="/cadastro" element={<Register />} />
           <Route path="/hoje" element={<Today />} />

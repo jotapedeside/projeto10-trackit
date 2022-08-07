@@ -14,9 +14,9 @@ export default function Login(){
     password: ""
   });
   const [enableBtn, setEnableBtn] = useState(true);
-  const { userData, setUserData } = useContext(UserContext);
+  const { setUserData } = useContext(UserContext);
   const forms = inputs();
-  console.log(userData);
+
   //INTERNAL FUNCTIONS
   function inputs() {
     return (
@@ -56,11 +56,7 @@ export default function Login(){
         password: user.password
     });
       res.then((user) => {
-        console.log(user.data);
-        console.log(user);
-        console.log(user.data.image);
         setUserData(user.data);
-        //setInfartinho(user.data);
         navigate("/hoje")
       })
       .catch(e => {

@@ -10,7 +10,6 @@ export function UserProvider({children}) {
     image: "",
     password: ""
   });
-  const [img, setImg] = useState("https://http.cat/411.jpg");
 
   return (
     <UserContext.Provider value={{userData, setUserData}}>
