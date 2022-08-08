@@ -10,6 +10,12 @@ import { useEffect, useState } from "react";
 export default function Today() {
 
   const {userData, setUserData} = useContext(UserContext);
+  const { token } = userData;
+  const config = {
+    headers: {
+        "Authorization": `Bearer ${token}`
+    }
+  }
   const navigate = useNavigate();
   const currentDate = dayjs().locale('pt-br');
   /*const {token} = userData;
@@ -38,7 +44,7 @@ export default function Today() {
       <Header />
       <StandardBody>
         <h1>{currentDate.format("dddd, DD/MM").replace(/^\w/, (c) => c.toUpperCase())}</h1>
-        <h2>Nenhum habito concluído ainda</h2>
+        <h3>Nenhum habito concluído ainda</h3>
         {/*habitos*/}
       </StandardBody>
       <Footer />

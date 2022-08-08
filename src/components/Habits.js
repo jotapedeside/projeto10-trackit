@@ -8,6 +8,7 @@ import axios from "axios";
 import { useContext } from "react";
 import UserContext from "./UserContext";
 import HabitsContext from "./HabitsContext";
+import { useEffect } from "react";
 
 export default function Habits() {
   //const [habits, setHabits] = useState([]);
@@ -25,15 +26,31 @@ export default function Habits() {
     {day: 'Q', selected: false},
     {day: 'S', selected: false},
     {day: 'S', selected: false},
-])
-const {userData, setUserData } = useContext(UserContext);
-const {habits, setHabits } = useContext(HabitsContext);
-const { token } = userData;
-const config = {
-  headers: {
-      "Authorization": `Bearer ${token}`
+  ])
+  const {userData, setUserData } = useContext(UserContext);
+  const {habits, setHabits } = useContext(HabitsContext);
+  const { token } = userData;
+  const config = {
+    headers: {
+        "Authorization": `Bearer ${token}`
+    }
   }
-}
+  const [reload, setReload] = useState(true);
+
+  useEffect(() => {
+    if (token !== undefined) {
+      //setDeleting(true)
+      const res = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+      res.then(({ data }) => {
+        //setDeleting(false);
+        console.log(res);
+        console.log(data);
+        console.log({data});
+        const dados = data;
+        setHabits(dados);
+      })
+    }
+  }, [reload])
 
   function handlePostHabit(){
     console.log(habitData);
@@ -47,8 +64,21 @@ const config = {
       const res = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
         habitData, config);
         console.log(res);
+        setEnableBtn(true);
+        setReload(!reload);
       }
     //}
+  }
+  function handleDeleteHabit(id){
+    if (id !== undefined){
+      const req = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config);
+      req.then(() => {
+        setReload(!reload);
+        alert("Hábito deletado com sucesso");
+      }).catch(() => {
+        alert("Erro ao deletar hábito");
+      })
+    }
   }
 
   function switchDay(id) {
@@ -90,6 +120,34 @@ const config = {
       </HabitCreation>
     )
   }
+
+  function ListHabits({days}){
+    const { habits } = useContext(HabitsContext);
+    console.log(habits);
+    return (
+      <>
+        {habits.map((ii, key) =>
+          <ListHabitsBody key={key}>
+            <HabitTitleCardHeader>
+              <h1>{ii.name}</h1>
+              <ion-icon onClick={() => handleDeleteHabit(ii.id)} name="trash-outline"></ion-icon>
+            </HabitTitleCardHeader>
+            <div key={key}>
+              {days.map((jj, key2) =>
+                <HabitDaysColors
+                  day={jj.day}
+                  selected={ii.days.some(dia => dia == key2)}
+                  >
+                  <p>{jj.day}</p>
+                </HabitDaysColors>
+              )}
+            </div>
+          </ListHabitsBody>
+        )}
+      </>
+    )
+  }
+
   const newHabit = createNewHabit();
   return (
     <>
@@ -102,12 +160,69 @@ const config = {
         {enableBtn ? <></> : newHabit}
         {habits.length === 0 ?
         <h2>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</h2> :
-        <h2>Listar habitos</h2>}
+        <ListHabits days={daysList} />
+        }
       </StandardBodyHabit>
       <Footer/>
     </>
   )
 }
+const ListHabitsBody = styled.div`
+  height: 100%;
+  background: #FFFFFF;
+  border-radius: 5px;
+  margin: 10px 0;
+  h1 {
+    font-size: 20px;
+    line-height: 25px;
+    color: #666666;
+    padding: 13px 0 8px 0;
+    margin-left: 8px;
+    word-wrap: break-word;
+    width: 85%;
+  }
+  ion-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  div{
+    margin-left: 7px;
+    display: flex;
+    div{
+      width: 30px;
+      height: 30px;
+      border: 1px solid #D5D5D5;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      p {
+        font-size: 20px;
+      }
+    }
+  }
+`
+const HabitTitleCardHeader = styled.div`
+  display: flex;
+  align-items: center;
+`
+const HabitDaysColors = (props) => {
+  const { day, selected } = props;
+    return (
+    <div style={{backgroundColor: selected ? "#DBDBDB" : "#FFFFFF"}}>
+      <p style={{color: selected ? "#FFFFFF" : "#DBDBDB"}}>{day}</p>
+    </div>
+  )
+}
+/*const HabitDaysColors = styled.div`
+  background: ${({ keyy, habits }) => background( keyy, habits)};
+  p{
+    color: ${({ keyy, habits }) => color( keyy, habits)};
+  }
+`*/
+
 /*
 function changeLetterColor(daySelected) {
   if (daySelected) return "#ffffff"
@@ -121,10 +236,10 @@ const HabitCreation = styled.div`
   height: 180px;
   background: #FFFFFF;
   border-radius: 5px;
-  margin: 20px 15px;
+  margin: 20px 0;
   /*position: relative;*/
   p {
-    font-size: 15.976px;
+    font-size: 16px;
     line-height: 20px;
     text-align: center;
     color: #52B6FF;
@@ -147,8 +262,8 @@ const HabitCreateBtn = styled.div`
 `
 
 const StandardBodyHabit = styled(StandardBody)`
-  div:first-child{
-    margin-bottom: 20px;
+  div:nth-child(2){
+    margin-bottom: 10px;
   }
   h2{
     color: #666666;

@@ -26,6 +26,12 @@ const StandardBody = styled.div`
     line-height: 29px;
     color: #126BA5;
   }
+  h2{
+    color: #666666;
+  }
+  h3{
+    color: #BABABA;
+  }
 `
 
 export {StandardBody};
