@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AssetsImgs from "../assets/img/AssetsImg";
 import axios from "axios";
 import UserContext from "../components/UserContext";
@@ -14,8 +14,21 @@ export default function Login(){
     password: ""
   });
   const [enableBtn, setEnableBtn] = useState(true);
-  const { setUserData } = useContext(UserContext);
+  const { userData, setUserData } = useContext(UserContext);
   const forms = inputs();
+
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const login = localStorage.getItem("login");
+    if (login) {
+      setUserData(localStorage.getItem("login"));
+      console.log(userData);
+      //navigate("/hoje");
+    }}, []);
+    /*
+    VERIFICAR SE RETORNA 401. REDIRECIONAR PARA A PAGINA DE LOGIN E REMOVE DADOS DE LOGIN DO LOCALSTORAGE
+    */
 
   //INTERNAL FUNCTIONS
   function inputs() {
@@ -57,6 +70,7 @@ export default function Login(){
     });
       res.then((user) => {
         setUserData(user.data);
+        localStorage.setItem("login", JSON.stringify(user.data));
         navigate("/hoje")
       })
       .catch(e => {
@@ -69,19 +83,16 @@ export default function Login(){
 
   return (
     <LoginScreen>
-      {/* TODO: ifsaved logic
-      {estaSalvo ? <Loader text="Um Segundo"/> : TREMdeBAIXO}*/}
+      
+      {isLogged ? <>Um momento</> :
       <>
         <img src={AssetsImgs.Logo} alt="logo" />
         <Forms onSubmit={validateLogin}>{forms}</Forms>
       </>
+      }
     </LoginScreen>
   )
 }
-
-/*function upd(){
-
-}*/
 
 const LoginScreen = styled.div`
   p{

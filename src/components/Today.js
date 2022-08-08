@@ -1,30 +1,47 @@
-import styled from "styled-components";
 import Header from "../assets/Header";
+import Footer from "../assets/Footer";
+import dayjs from "dayjs";
+import UserContext from "./UserContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import {StandardBody} from "./GlobalStyle";
+import { useEffect, useState } from "react";
 
 export default function Today() {
+
+  const {userData, setUserData} = useContext(UserContext);
+  const navigate = useNavigate();
+  const currentDate = dayjs().locale('pt-br');
+  /*const {token} = userData;
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  }*/
+  const [dados, setDados] = useState([]);
+
+  useEffect(() => {
+    const login = localStorage.getItem("login");
+    if (login) {
+      setDados(JSON.parse(login));
+      const {token} = dados;
+      const config = {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+      console.log(dados);
+    }}, []);
+
   return (
     <>
       <Header />
-      <TodayBody>
-        <h1>Oi</h1>
+      <StandardBody>
+        <h1>{currentDate.format("dddd, DD/MM").replace(/^\w/, (c) => c.toUpperCase())}</h1>
         <h2>Nenhum habito concluído ainda</h2>
         {/*habitos*/}
-      </TodayBody>
-      {/*TODO: create footer*/}
+      </StandardBody>
+      <Footer />
     </>
   )
 }
-
-const TodayBody = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  height: 100%;
-  margin-top: 70px;
-  padding: 30px 15px 110px 15px;
-  background-color: #E5E5E5;
-  h1 {
-    font-size: 23px;
-    line-height: 29px;
-    color: #126BA5;
-  }
-`
