@@ -5,8 +5,8 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 export default function Footer({percentage}){
-  //const roundedPercentage = Math.round(percentage);
-  const roundedPercentage = 66;
+  const roundedPercentage = Math.round(percentage);
+  //const roundedPercentage = 66;
   return (
     <FooterWrapper>
       <Link to="/habitos">

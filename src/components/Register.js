@@ -90,7 +90,7 @@ export default function Register() {
   return (
     <LoginScreen>
       {/* TODO: ifsaved logic
-      {estaSalvo ? <Loader text="Um Segundo"/> : TREMdeBAIXO}*/}
+      {isSaved ? <Loader text="Um Segundo"/> : TREMdeBAIXO}*/}
       <>
         <img src={AssetsImgs.Logo} alt="logo" />
         <Forms onSubmit={validateLogin}>{forms}</Forms>

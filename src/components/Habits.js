@@ -39,13 +39,10 @@ export default function Habits() {
 
   useEffect(() => {
     if (token !== undefined) {
-      //setDeleting(true)
+      //possible delete verification true
       const res = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
       res.then(({ data }) => {
-        //setDeleting(false);
-        console.log(res);
-        console.log(data);
-        console.log({data});
+        //possible delete verification false
         const dados = data;
         setHabits(dados);
       })
@@ -53,7 +50,6 @@ export default function Habits() {
   }, [reload])
 
   function handlePostHabit(){
-    console.log(habitData);
     //if(send){
       //tratamento de casos
       if(habitData.name.length === 0){
@@ -63,7 +59,6 @@ export default function Habits() {
       } else {
       const res = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
         habitData, config);
-        console.log(res);
         setEnableBtn(true);
         setReload(!reload);
       }
@@ -84,13 +79,11 @@ export default function Habits() {
   function switchDay(id) {
     const days = [...daysList];
     days[id].selected = !days[id].selected;
-    console.log(days);
     const daysListArray = [...daysList];
     const res = [];
     daysListArray.map((item, index) => {
       if(item.selected) res.push(index);
     });
-    console.log(res);
     setHabitData({days: res});
   }
 
@@ -123,12 +116,11 @@ export default function Habits() {
 
   function ListHabits({days}){
     const { habits } = useContext(HabitsContext);
-    console.log(habits);
     return (
       <>
         {habits.map((ii, key) =>
           <ListHabitsBody key={key}>
-            <HabitTitleCardHeader>
+            <HabitTitleCardHeader key={key}>
               <h1>{ii.name}</h1>
               <ion-icon onClick={() => handleDeleteHabit(ii.id)} name="trash-outline"></ion-icon>
             </HabitTitleCardHeader>
@@ -216,22 +208,7 @@ const HabitDaysColors = (props) => {
     </div>
   )
 }
-/*const HabitDaysColors = styled.div`
-  background: ${({ keyy, habits }) => background( keyy, habits)};
-  p{
-    color: ${({ keyy, habits }) => color( keyy, habits)};
-  }
-`*/
 
-/*
-function changeLetterColor(daySelected) {
-  if (daySelected) return "#ffffff"
-  else return "#DBDBDB"
-}
-function changeBackgroundColor(daySelected) {
-  if (daySelected) return "#DBDBDB";
-  else return "#ffffff"
-}*/
 const HabitCreation = styled.div`
   height: 180px;
   background: #FFFFFF;
@@ -352,10 +329,3 @@ const Day = (props) => {
     </div>
   )
 }
-/*  styled.div`
-  background: ${({ selected }) => changeBackgroundColor(selected)};
-  p {
-    color: ${({ selected }) => changeLetterColor(selected)};
- }
-`
-*/

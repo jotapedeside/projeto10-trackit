@@ -33,3 +33,6 @@ function App() {
 }
 
 export default App;
+//KNOWN BUGS:
+//Criar hábito não limpa o hábito anterior se vc não tiver mudado de página
+//Criar hábito limpa o nome na variável, mas não visualmente
