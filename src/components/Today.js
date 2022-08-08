@@ -63,12 +63,22 @@ export default function Today() {
 
   //const [btnClicked2, setBtnClicked2] = useState(true);
   function switchHabit(id, done) {
-    console.log("chegou aqui");
+    console.log("chegou aqui", id, done, btnClicked);
     if (id && done){
       //{done: !done}
-      const req = axios.put(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, {}, config);
+      const req = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, {}, config);
       req.then(() => {
         //setBtnClicked2(true);
+        setBtnClicked(true);
+        setDoHabit(!doHabit);
+        const per = todayHabits.filter((item) => item.done === true);
+        setPercentage((per.length / todayHabits.length) * 100);
+      }).catch(err => {
+        console.log(err);
+      })
+    } else if (id && !done) {
+      const req = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, {}, config);
+      req.then(() => {
         setBtnClicked(true);
         setDoHabit(!doHabit);
         const per = todayHabits.filter((item) => item.done === true);
